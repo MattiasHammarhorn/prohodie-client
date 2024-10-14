@@ -1,0 +1,16 @@
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Start</th>
+            <th>End</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let activity of activities">
+           <td>{{activity.name}}</td> 
+           <td>{{activity.startTime}}</td> 
+           <td>{{activity.endTime}}</td> 
+        </tr>
+    </tbody>
+</table>
