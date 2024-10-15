@@ -21,7 +21,7 @@ export class ActivitiesOverviewComponent implements OnInit {
 
   async initActivities() {
     try {
-      const response = await this.dataSvc.GetActivities();
+      const response = await this.dataSvc.getActivities();
       this.activities = await response.json();
       console.log(await response.json());
     } catch (error) {

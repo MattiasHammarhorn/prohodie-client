@@ -1,7 +1,7 @@
 export interface Activity {
     id: number,
     name: string,
-    activityId: number,
+    activityCategoryId: number,
     startTime: Date,
     endTime: Date
 }
