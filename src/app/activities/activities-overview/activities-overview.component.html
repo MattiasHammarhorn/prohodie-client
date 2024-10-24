@@ -9,8 +9,8 @@
     <tbody>
         <tr *ngFor="let activity of activities">
            <td scope="row">{{activity.name}}</td> 
-           <td>{{activity.startTime}}</td> 
-           <td>{{activity.endTime}}</td> 
+           <td>{{activity.startTime | date: 'mediumTime' }}</td> 
+           <td>{{activity.endTime | date: 'mediumTime' }}</td> 
         </tr>
     </tbody>
 </table>

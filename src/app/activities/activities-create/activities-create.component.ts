@@ -4,8 +4,6 @@ import { ActivitiesService } from '../../services/activities.service';
 import { Activity } from '../../models/activity';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { bootstrapPauseCircle, bootstrapPlayCircle } from '@ng-icons/bootstrap-icons';
-import { Observable } from 'rxjs/internal/Observable';
-import { of } from 'rxjs/internal/observable/of';
 
 @Component({
   selector: 'app-activities-create',
@@ -18,7 +16,7 @@ import { of } from 'rxjs/internal/observable/of';
 export class ActivitiesCreateComponent {
   timeInterval: any;
   timePassed: string = "00:00:00";
-  seconds: number = 3585;
+  seconds: number = 0;
   
   currentActivity: Activity | null = null;
   activityStarted: boolean = false;
@@ -27,7 +25,7 @@ export class ActivitiesCreateComponent {
     name: new FormControl(''),
     activityCategoryId: new FormControl(0),
     startDate: new FormControl(new Date),
-    endDate: new FormControl(new Date)
+    endDate: new FormControl()
   });
 
   constructor(private dataSvc: ActivitiesService) {}
@@ -41,29 +39,25 @@ export class ActivitiesCreateComponent {
       this.postActivity();
         console.log("updateTimer(): " + this.seconds);
         this.timeInterval = setInterval(() => {
-        //3780 % (600) / 60
         this.seconds++;
 
         let seconds = Math.round(this.seconds % 60);
         let minutes = Math.floor((this.seconds / 60) % 60);
         let hours = Math.floor(this.seconds / (60 * 60));
-        console.log("seconds: " + seconds);
-        console.log("minutes: " + minutes);
-        console.log("hours: " + hours);
 
-        let secondsa = seconds < 10 ? `0${seconds}` : `${seconds}`;
-        let minutesa = minutes < 10 ? `0${minutes}` : `${minutes}`;
-        let hoursa = hours < 10 ? `0${hours}` : `${hours}`;
+        let secondsDisplay = seconds < 10 ? `0${seconds}` : `${seconds}`;
+        let minutesDisplay = minutes < 10 ? `0${minutes}` : `${minutes}`;
+        let hoursDisplay = hours < 10 ? `0${hours}` : `${hours}`;
           
-        this.timePassed = `${hoursa.toString()}:${minutesa.toString()}:${secondsa}`;
+        this.timePassed = `${hoursDisplay.toString()}:${minutesDisplay.toString()}:${secondsDisplay}`;
         console.log("updateTimer(): " + this.seconds);
       }, 1000);
 
     } else {
-      this.seconds = 0;
-      this.timePassed = "00:00:00";
       clearInterval(this.timeInterval);
       this.updateActivity();
+      this.seconds = 0;
+      this.timePassed = "00:00:00";
     }
   }
 
@@ -75,7 +69,7 @@ export class ActivitiesCreateComponent {
         name: this.activityForm.value.name ?? '',
         activityCategoryId: this.activityForm.value.activityCategoryId  ?? 0,
         startTime: this.activityForm.value.startDate ?? new Date,
-        endTime: this.activityForm.value.endDate ?? new Date
+        endTime: this.activityForm.value.endDate ?? null
       };
 
       const request = new Request("https://localhost:7173/api/activities", {
@@ -94,8 +88,7 @@ export class ActivitiesCreateComponent {
       await this.dataSvc.postActivity(request)
       .then((response) => {
         var x = response.json().then((r) => {
-          console.log(r);
-          this.currentActivity!.id = r.id
+          this.currentActivity = r;
         });
       })
     }
@@ -107,18 +100,16 @@ export class ActivitiesCreateComponent {
       const startTime = new Date().getDate();
       console.log(this.currentActivity);
       
-      const endTime = new Date(this.activityForm.value.startDate!.setSeconds(this.seconds));
-      console.log("endTime: " + endTime);
+      const endTime = new Date();
+      
       let activity: Activity = {
         id: this.currentActivity!.id,
         name: this.activityForm.value.name ?? '',
         activityCategoryId: this.activityForm.value.activityCategoryId  ?? 0,
         startTime: this.activityForm.value.startDate ?? new Date,
-        // endTime: this.activityForm.value.endDate ?? new Date
-        endTime: endTime!
+        endTime: endTime
       }
-      console.log(activity);
-
+      
       const request = new Request("https://localhost:7173/api/activities/" + activity.id, {
         method: "PUT",
         body: JSON.stringify({
@@ -131,6 +122,10 @@ export class ActivitiesCreateComponent {
           "Content-Type": "application/json"
         }
       })
+
+      await this.dataSvc.updateActivity(request).then((response) => {
+        console.log(response);
+      });
     }
   }
 }

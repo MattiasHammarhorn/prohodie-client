@@ -14,4 +14,8 @@ export class ActivitiesService {
   async postActivity(request: Request) {
     return await fetch(request);
   }
+
+  async updateActivity(request: Request) {
+    return await fetch(request);
+  }
 }

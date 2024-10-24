@@ -3,5 +3,5 @@ export interface Activity {
     name: string,
     activityCategoryId: number,
     startTime: Date,
-    endTime: Date
+    endTime?: Date
 }
