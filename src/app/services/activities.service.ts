@@ -18,4 +18,8 @@ export class ActivitiesService {
   async updateActivity(request: Request) {
     return await fetch(request);
   }
+
+  async deleteActivity(request: Request) {
+    return await fetch(request);
+  }
 }

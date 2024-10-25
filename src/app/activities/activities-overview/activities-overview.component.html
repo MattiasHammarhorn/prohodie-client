@@ -4,13 +4,17 @@
             <th scope="col">Name</th>
             <th scope="col">Start</th>
             <th scope="col">End</th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let activity of activities">
-           <td scope="row">{{activity.name}}</td> 
-           <td>{{activity.startTime | date: 'mediumTime' }}</td> 
-           <td>{{activity.endTime | date: 'mediumTime' }}</td> 
+            <td scope="row">{{activity.name}}</td> 
+            <td>{{activity.startTime | date: 'mediumTime' }}</td> 
+            <td>{{activity.endTime | date: 'mediumTime' }}</td> 
+            <td>
+                <ng-icon name="bootstrapTrashFill" size="2.5em" (click)="deleteActivity(activity.id)"></ng-icon>
+            </td>
         </tr>
     </tbody>
 </table>
