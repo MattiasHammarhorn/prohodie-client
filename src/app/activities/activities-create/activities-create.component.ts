@@ -61,7 +61,7 @@ export class ActivitiesCreateComponent {
     }
   }
 
-  async postActivity() {
+  postActivity() {
     console.log("postActivity");
     if (this.activityForm.valid) {
       this.currentActivity = {
@@ -72,29 +72,14 @@ export class ActivitiesCreateComponent {
         endTime: this.activityForm.value.endDate ?? null
       };
 
-      const request = new Request("https://localhost:7173/api/activities", {
-        method: "POST",
-        body: JSON.stringify({
-          id: this.currentActivity.id,
-          name: this.currentActivity.name,
-          startTime: this.currentActivity.startTime,
-          endTime: this.currentActivity.endTime
-        }),
-        headers: {
-          "Content-Type": "application/json"
-        }
+      this.dataSvc.postActivity(this.currentActivity).subscribe({
+        next: (data) => {this.currentActivity = data},
+        error: (err) => {console.log(err)}
       });
-      // await this.dataSvc.postActivity(request);
-      await this.dataSvc.postActivity(request)
-      .then((response) => {
-        var x = response.json().then((r) => {
-          this.currentActivity = r;
-        });
-      })
     }
   }
 
-  async updateActivity() {
+  updateActivity() {
     console.log("updateActivity");
     if (this.activityForm.valid) {
       const startTime = new Date().getDate();
@@ -110,21 +95,11 @@ export class ActivitiesCreateComponent {
         endTime: endTime
       }
       
-      const request = new Request("https://localhost:7173/api/activities/" + activity.id, {
-        method: "PUT",
-        body: JSON.stringify({
-          id: activity.id,
-          name: activity.name,
-          startTime: activity.startTime,
-          endTime: activity.endTime
-        }),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-
-      await this.dataSvc.updateActivity(request).then((response) => {
-        console.log(response);
+      this.dataSvc.updateActivity(activity).subscribe({
+        next: (data) => {
+          console.log(data);
+        },
+        error: (err) => {console.log(err)}
       });
     }
   }

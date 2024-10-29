@@ -22,29 +22,18 @@ export class ActivitiesOverviewComponent implements OnInit {
     this.initActivities();
   }
 
-  async initActivities() {
-    try {
-      const response = await this.dataSvc.getActivities();
-      this.activities = await response.json();
-      console.log(await response.json());
-    } catch (error) {
-      console.log(error);
-    }
+  initActivities() {
+    this.dataSvc.getActivities().subscribe({
+      next: (data) => {
+        console.log(data);
+        this.activities = data;
+      },
+      error: (err) => { console.log(err) }
+    });
   }
 
-  async deleteActivity(id: number) {
-    try {
-      const request = new Request("https://localhost:7173/api/activities/" + id, {
-        method: "DELETE",
-        body: JSON.stringify({
-          'id': id
-        }),
-        headers: { 'Content-Type': 'application/json' }
-      })
-      const response = await this.dataSvc.deleteActivity(request);
-      console.log(response.json());
-    } catch (error) {
-      console.log(error);
-    }
+  deleteActivity(id: number): any {
+    this.dataSvc.deleteActivity(id).subscribe();
+    this.initActivities();
   }
 }

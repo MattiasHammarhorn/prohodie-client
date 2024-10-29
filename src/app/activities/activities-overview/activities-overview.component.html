@@ -8,12 +8,12 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let activity of activities">
+        <tr *ngFor="let activity of activities; track activity">
             <td scope="row">{{activity.name}}</td> 
             <td>{{activity.startTime | date: 'mediumTime' }}</td> 
             <td>{{activity.endTime | date: 'mediumTime' }}</td> 
             <td>
-                <ng-icon name="bootstrapTrashFill" size="2.5em" (click)="deleteActivity(activity.id)"></ng-icon>
+                <ng-icon name="bootstrapTrashFill" size="1.5em" (click)="deleteActivity(activity.id)"></ng-icon>
             </td>
         </tr>
     </tbody>
