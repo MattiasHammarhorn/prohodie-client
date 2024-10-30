@@ -33,7 +33,15 @@ export class ActivitiesOverviewComponent implements OnInit {
   }
 
   deleteActivity(id: number): any {
-    this.dataSvc.deleteActivity(id).subscribe();
+    this.dataSvc.deleteActivity(id).subscribe({
+      next: () => {
+        var activityIndex = this.activities.findIndex(activity => activity.id == id);
+        this.activities.splice(activityIndex, 1);
+      },
+      error: (err: any) => {
+        alert(err);
+      }
+    });
     this.initActivities();
   }
 }

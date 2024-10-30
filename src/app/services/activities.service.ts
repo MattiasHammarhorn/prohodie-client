@@ -23,6 +23,6 @@ export class ActivitiesService {
   }
 
   deleteActivity(id: number): any {
-    this.http.delete(this.endPoint + "/" + id, {params: {id: id}});
+    return this.http.delete(this.endPoint + "/" + id, {params: {id: id}});
   }
 }
