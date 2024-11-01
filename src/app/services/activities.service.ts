@@ -14,15 +14,19 @@ export class ActivitiesService {
     return this.http.get<Activity[]>(this.endPoint);
   }
 
+  getOngoingActivity(): Observable<Activity | null> {
+    return this.http.get<Activity>(this.endPoint + "/filter=ongoing");
+  }
+
   postActivity(activity: Activity): Observable<Activity> {
     return this.http.post<Activity>(this.endPoint, activity);
   }
 
-  updateActivity(activity: Activity) {
-    return this.http.put<Activity>(this.endPoint, activity);
+  updateActivity(id: number, activity: Activity) {
+    return this.http.put<Activity>(this.endPoint + "/" + id, activity);
   }
 
   deleteActivity(id: number): any {
-    return this.http.delete(this.endPoint + "/" + id, {params: {id: id}});
+    return this.http.delete(this.endPoint + "/" + id);
   }
 }
