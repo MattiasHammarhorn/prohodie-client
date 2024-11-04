@@ -65,7 +65,7 @@ export class ActivitiesCreateComponent implements OnInit {
     if (this.activityStarted) {
       this.postActivity();
       this.updateTimer();
-      this.statusIconClass = "bootstrapPlayCircle";
+      this.statusIconClass = "bootstrapPauseCircle";
     } else {
       clearInterval(this.timeInterval);
       this.updateActivity();
