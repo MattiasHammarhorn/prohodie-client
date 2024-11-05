@@ -71,7 +71,7 @@ export class ActivitiesCreateComponent implements OnInit {
       this.updateActivity();
       this.seconds = 0;
       this.timePassed = "00:00:00";
-      this.statusIconClass = "bootstrapPauseCircle";
+      this.statusIconClass = "bootstrapPlayCircle";
     }
     console.log("activityStarted: " + this.activityStarted);
     console.log("statusIconClass: " + this.statusIconClass);
@@ -109,7 +109,7 @@ export class ActivitiesCreateComponent implements OnInit {
       this.dataSvc.postActivity(this.currentActivity).subscribe({
         next: (data) => {
           this.currentActivity = data;
-          this.activityStarted = false;
+//           this.activityStarted = false;
         },
         error: (err) => {console.log(err)}
       });
