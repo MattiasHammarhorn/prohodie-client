@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivitiesService } from '../../services/activities.service';
 import { Activity } from '../../models/activity';
@@ -27,6 +27,8 @@ export class ActivitiesCreateComponent implements OnInit {
     startTime: new FormControl(new Date),
     endTime: new FormControl()
   });
+  
+  onActivityUpdated = output<Activity>();
 
   constructor(private dataSvc: ActivitiesService) {}
 
@@ -59,8 +61,8 @@ export class ActivitiesCreateComponent implements OnInit {
 
   toggleActivity() {
     console.log("toggleActivity()");
-    console.log("activityStarted: " + this.activityStarted);
     this.activityStarted = !this.activityStarted;
+    console.log("activityStarted: " + this.activityStarted);
     
     if (this.activityStarted) {
       this.postActivity();
@@ -78,7 +80,6 @@ export class ActivitiesCreateComponent implements OnInit {
   }
 
   updateTimer() {
-    console.log("updateTimer(): " + this.seconds);
     this.timeInterval = setInterval(() => {
       this.seconds++;
 
@@ -91,12 +92,11 @@ export class ActivitiesCreateComponent implements OnInit {
       let hoursDisplay = hours < 10 ? `0${hours}` : `${hours}`;
           
       this.timePassed = `${hoursDisplay.toString()}:${minutesDisplay.toString()}:${secondsDisplay}`;
-      console.log("updateTimer(): " + this.seconds);
     }, 1000);
   }
 
   postActivity() {
-    console.log("postActivity");
+    console.log("Posting activity...");
     if (this.activityForm.valid) {
       this.currentActivity = {
         id: 0,
@@ -108,8 +108,8 @@ export class ActivitiesCreateComponent implements OnInit {
 
       this.dataSvc.postActivity(this.currentActivity).subscribe({
         next: (data) => {
+          console.log("Post successful!");
           this.currentActivity = data;
-//           this.activityStarted = false;
         },
         error: (err) => {console.log(err)}
       });
@@ -117,7 +117,7 @@ export class ActivitiesCreateComponent implements OnInit {
   }
 
   updateActivity() {
-    console.log("updateActivity");
+    console.log("Updating activity...");
     if (this.activityForm.valid) {
       const startTime = new Date().getDate();
       console.log(this.currentActivity);
@@ -134,7 +134,7 @@ export class ActivitiesCreateComponent implements OnInit {
       
       this.dataSvc.updateActivity(activity.id, activity).subscribe({
         next: (data) => {
-          console.log(data);
+          console.log("Update successful!");
           this.activityForm.setValue({
             name: '',
             activityCategoryId: 0,
@@ -142,7 +142,7 @@ export class ActivitiesCreateComponent implements OnInit {
             endTime: null
           });
           this.activityStarted = false;
-          this.statusIconClass = "bootstrapPauseCircle";
+          this.onActivityUpdated.emit(activity);
         },
         error: (err) => {console.log(err)}
       });

@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule, NgFor } from '@angular/common';
+import { Component, Input, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Activity } from '../../models/activity';
 import { ActivitiesService } from '../../services/activities.service';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { bootstrapTrashFill } from '@ng-icons/bootstrap-icons';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-activities-overview',
@@ -14,12 +15,20 @@ import { bootstrapTrashFill } from '@ng-icons/bootstrap-icons';
   providers: [provideIcons({bootstrapTrashFill})]
 })
 export class ActivitiesOverviewComponent implements OnInit {
+  @Input() newItem: Activity | null = null;
+  @Input('clickSubject') clickSubject!: Subject<any>;
+
   activities: Activity[] = [];
 
   constructor(private dataSvc: ActivitiesService) {}
 
   ngOnInit() {
     this.initActivities();
+    this.clickSubject.subscribe(e => {
+      console.log("clickSubject.subscribe");
+      console.log(e);
+      this.updateActivities(e);
+    });
   }
 
   initActivities() {
@@ -43,5 +52,11 @@ export class ActivitiesOverviewComponent implements OnInit {
       }
     });
     this.initActivities();
+  }
+
+  updateActivities(activity: Activity) {
+    console.log("updateActivities called!");
+    this.activities.unshift(activity);
+    console.log(this.activities);
   }
 }
