@@ -4,4 +4,5 @@ export interface Activity {
     activityCategoryId: number,
     startTime: Date,
     endTime?: Date
+    timeSpan?: string
 }

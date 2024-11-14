@@ -36,6 +36,26 @@ export class ActivitiesOverviewComponent implements OnInit {
       next: (data) => {
         console.log(data);
         this.activities = data;
+        data.forEach( (activity) => {
+          if(activity.endTime != null) {
+            console.log("startTime: " + new Date(activity.startTime).getTime());
+            console.log("endTime: " + new Date(activity.endTime).getTime());
+            let totalTimeSpan = (new Date(activity.endTime).getTime() - new Date(activity.startTime).getTime()) / 1000;
+            console.log(totalTimeSpan);
+            
+            let seconds = Math.round(totalTimeSpan % 60);
+            let minutes = Math.floor((totalTimeSpan / 60) % 60);
+            let hours = Math.floor(totalTimeSpan / (60 * 60));
+
+            let secondsDisplay = seconds < 10 ? `0${seconds}` : `${seconds}`;
+            let minutesDisplay = minutes < 10 ? `0${minutes}` : `${minutes}`;
+            let hoursDisplay = hours < 10 ? `0${hours}` : `${hours}`;
+
+            activity.timeSpan = `${hoursDisplay}:${minutesDisplay}:${secondsDisplay}`;
+          }
+          this.activities.push(activity);
+          console.log(this.activities);
+      });
       },
       error: (err) => { console.log(err) }
     });
