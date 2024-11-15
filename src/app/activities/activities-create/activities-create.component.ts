@@ -4,18 +4,18 @@ import { ActivitiesService } from '../../services/activities.service';
 import { Activity } from '../../models/activity';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { bootstrapPauseCircle, bootstrapPlayCircle } from '@ng-icons/bootstrap-icons';
+import { TimeSpanPipe } from "../../pipes/time-span.pipe";
 
 @Component({
   selector: 'app-activities-create',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIconComponent],
+  imports: [ReactiveFormsModule, NgIconComponent, TimeSpanPipe],
   templateUrl: './activities-create.component.html',
   styleUrl: './activities-create.component.css',
   providers: [provideIcons({bootstrapPlayCircle, bootstrapPauseCircle})]
 })
 export class ActivitiesCreateComponent implements OnInit {
   timeInterval: any;
-  timePassed: string = "00:00:00";
   seconds: number = 0;
   
   currentActivity: Activity | null = null;
@@ -72,7 +72,6 @@ export class ActivitiesCreateComponent implements OnInit {
       clearInterval(this.timeInterval);
       this.updateActivity();
       this.seconds = 0;
-      this.timePassed = "00:00:00";
       this.statusIconClass = "bootstrapPlayCircle";
     }
     console.log("activityStarted: " + this.activityStarted);
@@ -82,16 +81,6 @@ export class ActivitiesCreateComponent implements OnInit {
   updateTimer() {
     this.timeInterval = setInterval(() => {
       this.seconds++;
-
-      let seconds = Math.round(this.seconds % 60);
-      let minutes = Math.floor((this.seconds / 60) % 60);
-      let hours = Math.floor(this.seconds / (60 * 60));
-
-      let secondsDisplay = seconds < 10 ? `0${seconds}` : `${seconds}`;
-      let minutesDisplay = minutes < 10 ? `0${minutes}` : `${minutes}`;
-      let hoursDisplay = hours < 10 ? `0${hours}` : `${hours}`;
-          
-      this.timePassed = `${hoursDisplay.toString()}:${minutesDisplay.toString()}:${secondsDisplay}`;
     }, 1000);
   }
 

@@ -12,11 +12,9 @@
         <tr *ngFor="let activity of activities;">
             <td scope="row">{{activity.name}}</td> 
             <td>{{activity.startTime | date: 'shortTime' }}</td> 
-            <td>{{activity.endTime | date: 'shortTime' }}
-            </td>
+            <td>{{activity.endTime | date: 'shortTime' }}</td>
             <td>
-                {{activity?.timeSpan}}
-</td> 
+                <ng-container *ngIf="activity.timeSpan"></ng-container>{{activity.timeSpan! | timeSpan }}</td>
             <td>
                 <ng-icon name="bootstrapTrashFill" style="cursor:pointer" size="1.5em" (click)="deleteActivity(activity.id)"></ng-icon>
             </td>

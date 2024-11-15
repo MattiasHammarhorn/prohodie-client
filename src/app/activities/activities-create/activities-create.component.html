@@ -18,7 +18,7 @@
         </div> -->
         <div class="col-1">
             <span>
-                {{timePassed}}
+                {{seconds | timeSpan}}
             </span>
         </div>
         <button type="submit" (click)="toggleActivity()" class="col-1 btn btn-success">
