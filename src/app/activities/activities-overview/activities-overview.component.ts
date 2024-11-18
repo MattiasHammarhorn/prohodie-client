@@ -33,17 +33,15 @@ export class ActivitiesOverviewComponent implements OnInit {
   }
 
   initActivities() {
-    this.dataSvc.getActivities().subscribe({
+      this.dataSvc.getActivities().subscribe({
       next: (data) => {
         console.log(data);
-        this.activities = data;
         data.forEach( (activity) => {
           if(activity.endTime != null) {
             activity.timeSpan = (new Date(activity.endTime).getTime() - new Date(activity.startTime).getTime()) / 1000;
           }
           this.activities.push(activity);
-          console.log(this.activities);
-      });
+        });
       },
       error: (err) => { console.log(err) }
     });
@@ -63,8 +61,7 @@ export class ActivitiesOverviewComponent implements OnInit {
   }
 
   updateActivities(activity: Activity) {
-    console.log("updateActivities called!");
+    activity.timeSpan = (new Date(activity.endTime!).getTime() - new Date(activity.startTime).getTime()) / 1000;
     this.activities.unshift(activity);
-    console.log(this.activities);
   }
 }

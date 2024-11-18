@@ -1,10 +1,11 @@
-import { Component, OnInit, output } from '@angular/core';
+import { Component, Input, OnInit, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivitiesService } from '../../services/activities.service';
 import { Activity } from '../../models/activity';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { bootstrapPauseCircle, bootstrapPlayCircle } from '@ng-icons/bootstrap-icons';
 import { TimeSpanPipe } from "../../pipes/time-span.pipe";
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-activities-create',
@@ -30,10 +31,16 @@ export class ActivitiesCreateComponent implements OnInit {
   
   onActivityUpdated = output<Activity>();
 
+  @Input('focusSubject') focusSubject!: Subject<any>;
+
   constructor(private dataSvc: ActivitiesService) {}
 
   ngOnInit() {
     this.getOngoingActivity();
+    this.focusSubject.subscribe(e => {
+      if (this.currentActivity)
+        this.seconds = (new Date().getTime() - new Date(this.currentActivity.startTime).getTime()) / 1000;
+    });
   }
 
   getOngoingActivity() {
@@ -48,7 +55,7 @@ export class ActivitiesCreateComponent implements OnInit {
             startTime: this.currentActivity.startTime,
             endTime: this.currentActivity.endTime,
           });
-          this.seconds = new Date(this.currentActivity!.startTime).getSeconds() + new Date().getSeconds();
+          this.seconds = (new Date().getTime() - new Date(this.currentActivity!.startTime).getTime()) / 1000; 
           this.activityStarted = true;
           this.statusIconClass = "bootstrapPauseCircle";
           console.log("activityStarted: " + this.activityStarted);
