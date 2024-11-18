@@ -20,16 +20,11 @@ export class AppComponent {
   
   @HostListener('window:focus', ['$event'])
   onFocus(event: FocusEvent): any {
-    console.log("focus:");
-    console.log(event);
     this.focusSubject.next(event);
-    // this.focusSubject.next(@event);
   }
 
-  logValue($event: Activity) {
-    console.log("logValue fired from app-component with value:");
-    console.log($event);
-    this.currentItem = $event;
+  logValue(event: Activity) {
+    this.currentItem = event;
     this.clickSubject.next(this.currentItem);
   }
 }

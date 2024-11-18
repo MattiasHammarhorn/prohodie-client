@@ -26,8 +26,6 @@ export class ActivitiesOverviewComponent implements OnInit {
   ngOnInit() {
     this.initActivities();
     this.clickSubject.subscribe(e => {
-      console.log("clickSubject.subscribe");
-      console.log(e);
       this.updateActivities(e);
     });
   }
@@ -54,7 +52,7 @@ export class ActivitiesOverviewComponent implements OnInit {
         this.activities.splice(activityIndex, 1);
       },
       error: (err: any) => {
-        alert(err);
+        console.log(err);
       }
     });
     this.initActivities();

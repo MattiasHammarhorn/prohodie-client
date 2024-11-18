@@ -58,8 +58,6 @@ export class ActivitiesCreateComponent implements OnInit {
           this.seconds = (new Date().getTime() - new Date(this.currentActivity!.startTime).getTime()) / 1000; 
           this.activityStarted = true;
           this.statusIconClass = "bootstrapPauseCircle";
-          console.log("activityStarted: " + this.activityStarted);
-          console.log("statusIconClass: " + this.statusIconClass);
           this.updateTimer();
         }},
       error: (err) => { console.log(err) }
@@ -67,9 +65,7 @@ export class ActivitiesCreateComponent implements OnInit {
   }
 
   toggleActivity() {
-    console.log("toggleActivity()");
     this.activityStarted = !this.activityStarted;
-    console.log("activityStarted: " + this.activityStarted);
     
     if (this.activityStarted) {
       this.postActivity();
@@ -81,8 +77,6 @@ export class ActivitiesCreateComponent implements OnInit {
       this.seconds = 0;
       this.statusIconClass = "bootstrapPlayCircle";
     }
-    console.log("activityStarted: " + this.activityStarted);
-    console.log("statusIconClass: " + this.statusIconClass);
   }
 
   updateTimer() {
@@ -116,7 +110,6 @@ export class ActivitiesCreateComponent implements OnInit {
     console.log("Updating activity...");
     if (this.activityForm.valid) {
       const startTime = new Date().getDate();
-      console.log(this.currentActivity);
       
       const endTime = new Date();
       
@@ -137,6 +130,7 @@ export class ActivitiesCreateComponent implements OnInit {
             startTime: new Date,
             endTime: null
           });
+          this.seconds = 0;
           this.activityStarted = false;
           this.onActivityUpdated.emit(activity);
         },
