@@ -1,23 +1,48 @@
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Start</th>
-            <th scope="col">End</th>
-            <th scope="col">Timespan</th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let activity of activities;">
-            <td scope="row">{{activity.name}}</td> 
-            <td>{{activity.startTime | date: 'shortTime' }}</td> 
-            <td>{{activity.endTime | date: 'shortTime' }}</td>
-            <td>
-                <ng-container *ngIf="activity.timeSpan"></ng-container>{{activity.timeSpan! | timeSpan }}</td>
-            <td>
-                <ng-icon name="bootstrapTrashFill" style="cursor:pointer" size="1.5em" (click)="deleteActivity(activity.id)"></ng-icon>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<form [formGroup]="activityForm">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Start</th>
+                <th scope="col">End</th>
+                <th scope="col">Timespan</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody formArrayName="activityArray">
+            <ng-container *ngFor="let activityForm of activityArrayControls.controls; let i = index;">
+                <tr [formGroupName]="i">
+                    <td id="activity-name-{{i}}" scope="row" 
+                        ngDefaultControl
+                        formControlName="name"
+                        contentEditable="true"
+                    >
+                        {{activityForm.get('name')?.value}}
+                    </td> 
+                    <td id="activity-startTime-{{i}}"
+                        ngDefaultControl
+                        formControlName="startTime"
+                        contentEditable="true"
+                    >
+                        {{activityForm.get('startTime')?.value | date: 'shortTime'}}
+                    </td>
+                    <td id="activity-endTime-{{i}}"
+                        ngDefaultControl
+                        contentEditable="true"
+                    >
+                        {{activityForm.get('endTime')?.value | date: 'shortTime'}}
+                    </td>
+                    <td id="activity-timeSpan-{{i}}"
+                        ngDefaultControl
+                        contentEditable="true"
+                    >
+                        {{activityForm.get('timeSpan')?.value | timeSpan}}
+                    </td>
+                    <td>
+                        <!-- <ng-icon name="bootstrapTrashFill" style="cursor:pointer" size="1.5em" (click)="deleteActivity(activity.id)"></ng-icon> -->
+                    </td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</form>

@@ -5,12 +5,13 @@ import { ActivitiesService } from '../../services/activities.service';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { bootstrapTrashFill } from '@ng-icons/bootstrap-icons';
 import { Subject } from 'rxjs';
+import { FormArray, FormBuilder, FormControl, FormControlName, FormGroup, FormGroupName, ReactiveFormsModule } from '@angular/forms';
 import { TimeSpanPipe } from "../../pipes/time-span.pipe";
 
 @Component({
   selector: 'app-activities-overview',
   standalone: true,
-  imports: [CommonModule, NgIconComponent, TimeSpanPipe],
+  imports: [CommonModule, ReactiveFormsModule, NgIconComponent, TimeSpanPipe],
   templateUrl: './activities-overview.component.html',
   styleUrl: './activities-overview.component.css',
   providers: [provideIcons({bootstrapTrashFill})]
@@ -28,15 +29,34 @@ export class ActivitiesOverviewComponent implements OnInit {
     this.clickSubject.subscribe(e => {
       this.updateActivities(e);
     });
+
+    this.activityForm = this.formBuilder.group({
+      activityArray: this.formBuilder.array([])
+    });
+  }
+
+  get activityArrayControls(): FormArray {
+    return this.activityForm.controls['activityArray'] as FormArray;
   }
 
   initActivities() {
       this.dataSvc.getActivities().subscribe({
       next: (data) => {
-        console.log(data);
+        let activityArray = this.activityArrayControls;
+
         data.forEach( (activity) => {
           if(activity.endTime != null) {
-            activity.timeSpan = (new Date(activity.endTime).getTime() - new Date(activity.startTime).getTime()) / 1000;
+            var timeSpan = (new Date(activity.endTime).getTime() - new Date(activity.startTime).getTime()) / 1000;
+            
+            let formActivities = this.formBuilder.group({
+              id: new FormControl(activity.id),
+              name: new FormControl(activity.name!),
+              activityCategoryId: new FormControl(activity.activityCategoryId),
+              startTime: new FormControl(new Date(activity.startTime)),
+              endTime: new FormControl(new Date(activity.endTime) ?? null),
+              timeSpan: new FormControl(timeSpan)
+            })
+            activityArray.push(formActivities);
           }
           this.activities.push(activity);
         });
