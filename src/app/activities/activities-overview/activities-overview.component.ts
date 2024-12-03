@@ -21,8 +21,9 @@ export class ActivitiesOverviewComponent implements OnInit {
   @Input('clickSubject') clickSubject!: Subject<any>;
 
   activities: Activity[] = [];
+  activityForm: FormGroup = new FormGroup({});
 
-  constructor(private dataSvc: ActivitiesService) {}
+  constructor(private dataSvc: ActivitiesService, private formBuilder: FormBuilder) {}
 
   ngOnInit() {
     this.initActivities();
@@ -65,21 +66,32 @@ export class ActivitiesOverviewComponent implements OnInit {
     });
   }
 
-  deleteActivity(id: number): any {
-    this.dataSvc.deleteActivity(id).subscribe({
-      next: () => {
-        var activityIndex = this.activities.findIndex(activity => activity.id == id);
-        this.activities.splice(activityIndex, 1);
-      },
-      error: (err: any) => {
-        console.log(err);
+  deleteActivity(index: number): any {
+    let formGroup = this.activityArrayControls.controls.at(index);
+    if (formGroup !== undefined) {
+      let activityId = formGroup.get('id')?.value;
+      if (activityId !== undefined || activityId !==null) {
+        this.dataSvc.deleteActivity(activityId).subscribe({
+          next: () => {
+            this.activityArrayControls.removeAt(index);
+          },
+          error: (err: any) => {
+            console.log(err);
+          }
+        });
+        this.initActivities();
       }
-    });
-    this.initActivities();
+    }
   }
 
   updateActivities(activity: Activity) {
-    activity.timeSpan = (new Date(activity.endTime!).getTime() - new Date(activity.startTime).getTime()) / 1000;
-    this.activities.unshift(activity);
+    let formGroup = this.formBuilder.group({
+      id: activity.id,
+      startTime: activity.startTime,
+      endTime: activity.endTime,
+      name: activity.name,
+      timeSpan: (new Date(activity.endTime!).getTime() - new Date(activity.startTime).getTime()) / 1000
+    });
+    this.activityArrayControls.insert(0,formGroup);
   }
 }

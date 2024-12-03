@@ -78,7 +78,7 @@ export class ActivitiesCreateComponent implements OnInit {
       this.statusIconClass = "bootstrapPlayCircle";
     }
   }
-
+  
   updateTimer() {
     this.timeInterval = setInterval(() => {
       this.seconds++;
