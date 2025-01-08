@@ -12,34 +12,39 @@
         <tbody formArrayName="activityArray">
             <ng-container *ngFor="let activityForm of activityArrayControls.controls; let i = index;">
                 <tr [formGroupName]="i">
-                    <td id="activity-name-{{i}}" scope="row" 
-                        ngDefaultControl
-                        formControlName="name"
-                        contentEditable="true"
-                    >
-                        {{activityForm.get('name')?.value}}
+                    <td scope="row">
+                        <input type="text"
+                            id="activity-name-{{i}}"
+                            formControlName="name"
+                            (blur)="onBlur(i)"
+                        />
                     </td> 
-                    <td id="activity-startTime-{{i}}"
-                        ngDefaultControl
-                        formControlName="startTime"
-                        contentEditable="true"
-                    >
-                        {{activityForm.get('startTime')?.value | date: 'shortTime'}}
-                    </td>
-                    <td id="activity-endTime-{{i}}"
-                        ngDefaultControl
-                        contentEditable="true"
-                    >
-                        {{activityForm.get('endTime')?.value | date: 'shortTime'}}
-                    </td>
-                    <td id="activity-timeSpan-{{i}}"
-                        ngDefaultControl
-                        contentEditable="true"
-                    >
-                        {{activityForm.get('timeSpan')?.value | timeSpan}}
+                    <td>
+                        <input type="datetime" id="activity-startTime-{{i}}"
+                            formControlName="startTime"
+                            contentEditable="true"
+                            (blur)="onBlur(i)"
+                        />
+                        <!-- {{activityForm.get('startTime')?.value | date: 'shortTime'}} -->
                     </td>
                     <td>
-                        <!-- <ng-icon name="bootstrapTrashFill" style="cursor:pointer" size="1.5em" (click)="deleteActivity(activity.id)"></ng-icon> -->
+                        <input type="datetime" id="activity-endTime-{{i}}"
+                            formControlName="endTime"
+                            contentEditable="true"
+                            (blur)="onBlur(i)"
+                        />
+                        <!-- {{activityForm.get('endTime')?.value | date: 'shortTime'}} -->
+                    </td>
+                    <td>
+                        <input type="number" id="activity-timeSpan-{{i}}"
+                            formControlName="timeSpan"
+                            contentEditable="true"
+                            (blur)="onBlur(i)"
+                        />
+                        <!-- {{activityForm.get('timeSpan')?.value | timeSpan}} -->
+                    </td>
+                    <td>
+                        <ng-icon name="bootstrapTrashFill" style="cursor:pointer" size="1.5em" (click)="deleteActivity(i)"></ng-icon>
                     </td>
                 </tr>
             </ng-container>

@@ -94,4 +94,43 @@ export class ActivitiesOverviewComponent implements OnInit {
     });
     this.activityArrayControls.insert(0,formGroup);
   }
+
+  onBlur(index: any) {
+    let activityForm = this.activityArrayControls.controls.at(index);
+    if (activityForm !== undefined) {
+      if(activityForm.valid) {
+        var patchDoc = [];
+        
+        var activityId = activityForm.get('id')!.getRawValue();
+
+        if (activityForm.get('name')!.dirty)
+          patchDoc.push({ op: "replace", path: "/name", value: activityForm.get('name')!.value });
+
+        if (activityForm.get('startTime')!.dirty) {
+          var startTime = new Date(activityForm.get('startTime')!.value);
+          patchDoc.push({ op: "replace", path: "/startTime", value: startTime });
+        }
+        if (activityForm.get('endTime')!.dirty) {
+          var endTime = new Date(activityForm.get('endTime')!.value);
+          patchDoc.push({ op: "replace", path: "/endTime", value: endTime });
+        }
+
+        if (activityForm.get('activityCategoryId')!.dirty)
+          patchDoc.push({ op: "replace", path: "/activityCategoryId", value: new Date(activityForm.get('activityCategoryId')!.value) });
+        
+        this.updateActivity(activityId, patchDoc);
+      }
+    }
+  }
+
+  updateActivity(id: number, patchDoc: any) {
+    console.log("Updating activity from ActivityOverview...");
+    this.dataSvc.patchActivity(id, patchDoc).subscribe({
+      next: (data) => {
+        console.log("Activity successfully updated from ActivityOverview!");
+        console.log(data);
+      },
+      error: (err) => { console.log() }
+    })
+  }
 }

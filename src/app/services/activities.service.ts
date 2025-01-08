@@ -26,6 +26,10 @@ export class ActivitiesService {
     return this.http.put<Activity>(this.endPoint + "/" + id, activity);
   }
 
+  patchActivity(id: number, patchDoc: any) {
+    return this.http.patch<any>(this.endPoint + "/" + id, patchDoc);
+  }
+
   deleteActivity(id: number): any {
     return this.http.delete(this.endPoint + "/" + id);
   }
