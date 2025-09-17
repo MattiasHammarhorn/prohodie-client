@@ -1,5 +1,6 @@
 import { Component, HostListener, Output } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { LoginFormComponent } from "./auth/login-form/login-form.component";
 import { ActivitiesOverviewComponent } from "./activities/activities-overview/activities-overview.component";
 import { ActivitiesCreateComponent } from "./activities/activities-create/activities-create.component";
 import { Activity } from './models/activity';
@@ -8,7 +9,7 @@ import { Subject } from 'rxjs';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ActivitiesOverviewComponent, ActivitiesCreateComponent],
+  imports: [RouterOutlet, LoginFormComponent, ActivitiesOverviewComponent, ActivitiesCreateComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
