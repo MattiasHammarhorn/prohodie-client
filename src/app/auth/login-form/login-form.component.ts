@@ -13,7 +13,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 export class LoginFormComponent {
   userLoginModel: UserLoginModel | null = null;
   loginForm = new FormGroup({
-    userName: new FormControl('',[Validators.required]),
+    email: new FormControl('',[Validators.required, Validators.email]),
     password: new FormControl('',[Validators.required])
   });
 
@@ -24,7 +24,7 @@ export class LoginFormComponent {
       console.log("Logging in...");
 
       this.userLoginModel = {
-        userName: this.loginForm.value.userName ?? '',
+        email: this.loginForm.value.email ?? '',
         password: this.loginForm.value.password ?? ''
       }
 
